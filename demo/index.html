@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>porcupine-css-in-js demo</title>
+
+        <script src="../lib/index.js"></script>
+        <script>
+            new PorCIJ({
+                'html,body': {
+                    width: '100%',
+                    height: '100%',
+                    overflow: 'hidden',
+                    position: 'relative',
+                },
+                'body': {
+                    background: 'rgba(0, 0, 0, .1)',
+                    div: {
+                        border: '1px solid #a789b6',
+                        padding: '1em',
+                        div: {
+                            '&:hover': {
+                                backgroundColor: '#a789b6',
+                                color: 'white',
+                                cursor: 'pointer'
+                            }
+                        },
+                    },
+                    a: {
+                        textAlign: 'center'
+                    }
+                },
+                '.text': {
+                    fontWeight: 'normal',
+                    fontStretch: 'normal',
+                    color: '#a789b6',
+                    textAlign: 'center',
+                    position: 'absolute',
+                    left: '50%',
+                    top: '40%',
+                    transform: 'translate(-50%, -50%)',
+
+                    '.font_404': {
+                        'font-size': '30px',
+                    },
+                    '.font_description': {
+                        'font-size': '20px'
+                    },
+                    '&:first-child': {
+                        background: 'white'
+                    }
+                }
+            })
+        </script>
+    </head>
+    <body>
+        <div class="text">
+            <div class="font_404">
+                服务升级中
+                <span id="ani">
+                    ...
+                </span>
+            </div>
+            <div class="font_description">
+                预计完成时间：2019/05/09 12:30
+            </div>
+        </div>
+
+        <script>
+        function Going(obj) {
+
+            this.init(obj);
+        };
+
+        Going.prototype = {
+            init: function(obj) {
+                this.icon = obj.icon;
+                this.length = obj.length;
+                this.timeout = null;
+                this.text = '';
+                this.el = document.querySelector(obj.el);
+
+                this.start();
+            },
+            start: function() {
+                this.stop();
+                var length = 0,
+                    iconArr = [];
+                this.timeout = setInterval(function() {
+                    length += 1;
+
+                    iconArr.push(this.icon);
+
+                    this.text = iconArr.join('');
+                    this.el.innerText = this.text;
+
+                    if(this.length <= length) {
+                        length = 0;
+                        this.text = '';
+                        iconArr = [];
+                    };
+                }.bind(this), 1000)
+            },
+            stop: function() {
+                clearInterval(this.timeout);
+                this.timeout = null;
+            }
+        };
+
+        new Going({
+            el: '#ani',
+            icon: '.',
+            length: 3
+        })
+    </script>
+    </body>
+</html>
